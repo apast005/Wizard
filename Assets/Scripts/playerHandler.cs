@@ -56,5 +56,10 @@ public class playerHandler : MonoBehaviour
             transform.Translate(Vector3.up * 5 * Time.deltaTime);
         }
 
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            transform.Translate(Vector3.forward * 20 * Time.deltaTime);
+        }
+
     }
 }

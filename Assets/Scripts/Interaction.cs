@@ -10,11 +10,13 @@ public class Interaction : MonoBehaviour
     public bool isInRange;
     public KeyCode interactKey;
     public UnityEvent interactAction;
+    public GameObject displayText;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        isInRange = false;
+        displayText.SetActive(false);
     }
 
     // Update is called once per frame
@@ -22,9 +24,10 @@ public class Interaction : MonoBehaviour
     {
         if (isInRange)
         {
-            if(Input.GetKeyDown(interactKey))
+            displayText.SetActive(true);
+            if (Input.GetKeyDown(interactKey))
             {
-                interactAction.Invoke();
+                gameObject.GetComponent<Animator>().Play("Button");
             }
         }
     }
@@ -34,6 +37,7 @@ public class Interaction : MonoBehaviour
         if(collision.gameObject.CompareTag("Player"))
         {
             isInRange = true;
+            
             Debug.Log("Player is in range");
         }
     }
@@ -43,6 +47,7 @@ public class Interaction : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             isInRange = false;
+            displayText.SetActive(false);
             Debug.Log("Player is out of range");
         }
     }
