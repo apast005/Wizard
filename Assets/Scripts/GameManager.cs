@@ -6,13 +6,14 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     GameObject player;
-    playerHandler playerScript;
+    playerHandler playerHandler;
+    public float gravity = -9.8f;
 
     private void Awake()
     {
         instance = this;
         player = GameObject.FindGameObjectWithTag("Player");
-        playerScript = player.GetComponent<playerHandler>();
+        playerHandler = player.GetComponent<playerHandler>();
     }
     // Start is called before the first frame update
     void Start()
