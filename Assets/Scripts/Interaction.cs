@@ -34,10 +34,10 @@ public class Interaction : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if(collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             isInRange = true;
-            
+
             Debug.Log("Player is in range");
         }
     }

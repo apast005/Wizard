@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InventoryItemData : MonoBehaviour
 {
-    private bool inventoryEnabled = false;
+    public bool inventoryEnabled = false;
     public GameObject inventory;
 
     private int allSlots;
@@ -22,24 +22,7 @@ public class InventoryItemData : MonoBehaviour
         {
             slot[i] = slotHolder.transform.GetChild(i).gameObject;
         }
-        
+
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            inventoryEnabled = !inventoryEnabled;
-        }
-
-        if (inventoryEnabled == true)
-        {
-            inventory.SetActive(true);
-        }
-        else
-        {
-            inventory.SetActive(false);
-        }
-        
-    }
 }

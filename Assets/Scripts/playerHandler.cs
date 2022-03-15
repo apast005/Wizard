@@ -11,13 +11,12 @@ public class playerHandler : MonoBehaviour
     float velocity;
     public Vector2 turn;
 
-    
+
 
 
     void Start()
     {
         gravity = GameManager.instance.gravity;
-        Cursor.lockState = CursorLockMode.Locked;
 
     }
 
