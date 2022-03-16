@@ -5,9 +5,19 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public bool canMove { get; private set; } = true;
+    private bool isSprinting => canSprint && Input.GetKey(sprintKey);
+
+    [Header("Functional Options")]
+    [SerializeField] private bool canSprint = true;
+    [SerializeField] private bool canInteract = true;
+
+    [Header("Controls")]
+    [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
+    [SerializeField] private KeyCode interactKey = KeyCode.Mouse0;
 
     [Header("Player Movement")]
     [SerializeField] private float walkSpeed = 3.0f;
+    [SerializeField] private float sprintSpeed = 6.0f;
     [SerializeField] private float gravity = 30.0f;
 
     [Header("Look Parameters")]
@@ -24,32 +34,41 @@ public class PlayerController : MonoBehaviour
 
     private float rotationX = 0;
 
+    [Header("Raycast Parameters")]
+    [SerializeField] private Vector3 interactionRayPoint = default;
+    [SerializeField] private float interactionDistance = default;
+    [SerializeField] private LayerMask interactionLayer = 7;
+    private InteractableObject currentInteractable;
+
+
     void Awake()
     {
         playerCamera = GetComponentInChildren<Camera>();
         characterController = GetComponentInChildren<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
-    
     void Update()
     {
+        
         if (canMove)
         {
             HandleMovementInput();
             HandleMouseMovement();
-
             ApplyFinalMovements();
         }
-        
+
+        if(canInteract)
+        {
+            CastRay();
+        }
     }
 
 
     private void HandleMovementInput()
     {
 
-        currentInput = new Vector2(walkSpeed * Input.GetAxis("Vertical"), walkSpeed * Input.GetAxis("Horizontal"));
+        currentInput = new Vector2((isSprinting ? sprintSpeed : walkSpeed) * Input.GetAxis("Vertical"), (isSprinting ? sprintSpeed : walkSpeed) * Input.GetAxis("Horizontal"));
 
         float moveDirectionY = moveDirection.y;
         moveDirection = (transform.TransformDirection(Vector3.forward) * currentInput.x) + (transform.TransformDirection(Vector3.right) * currentInput.y);
@@ -76,4 +95,23 @@ public class PlayerController : MonoBehaviour
         characterController.Move(moveDirection * Time.deltaTime);
 
     }
+
+    void CastRay()
+    {
+        RaycastHit hitInfo = new RaycastHit();
+        bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, interactionDistance);
+        if (hit)
+        {
+            GameObject hitObject = hitInfo.transform.gameObject;
+            if (Input.GetMouseButtonDown(0))
+            {
+                if(hitObject.gameObject.layer == 7)
+                {
+                    hitObject.GetComponent<InteractableObject>().Interact();
+                }
+            }
+        }
+    }
+
+        
 }
